@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Component, useSyncExternalStore, type ReactNode } from "react";
+import { DecorativeBoundary, useMediaQuery, useMotionAllowed, useWebGL } from "./decorative";
 
 /*
  * Decorative violet ribbons inside the hero's rowhouse photo.
@@ -15,56 +15,13 @@ const AuroraRibbons = dynamic(() => import("@/components/ui/aurora-ribbons"), {
   loading: () => null,
 });
 
-function subscribeMedia(query: string) {
-  return (onChange: () => void) => {
-    const list = window.matchMedia(query);
-    list.addEventListener("change", onChange);
-    return () => list.removeEventListener("change", onChange);
-  };
-}
-
-const REDUCED = "(prefers-reduced-motion: reduce)";
-/** Same breakpoint as the hero's mobile layout in counter-hero.css. */
-const SMALL = "(max-width: 760px)";
-const subscribeReduced = subscribeMedia(REDUCED);
-const subscribeSmall = subscribeMedia(SMALL);
-const noSubscribe = () => () => {};
-
-let webglSupport: boolean | null = null;
-function hasWebGL(): boolean {
-  if (webglSupport === null) {
-    try {
-      const canvas = document.createElement("canvas");
-      webglSupport = Boolean(canvas.getContext("webgl2") ?? canvas.getContext("webgl"));
-    } catch {
-      webglSupport = false;
-    }
-  }
-  return webglSupport;
-}
-
-class DecorativeBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
-  state = { failed: false };
-
-  static getDerivedStateFromError() {
-    return { failed: true };
-  }
-
-  componentDidCatch() {
-    // Decorative only: drop the effect and keep the hero as it is.
-  }
-
-  render() {
-    return this.state.failed ? null : this.props.children;
-  }
-}
-
 export default function HeroAurora() {
-  const reduced = useSyncExternalStore(subscribeReduced, () => window.matchMedia(REDUCED).matches, () => true);
-  const small = useSyncExternalStore(subscribeSmall, () => window.matchMedia(SMALL).matches, () => false);
-  const webgl = useSyncExternalStore(noSubscribe, hasWebGL, () => false);
+  const motion = useMotionAllowed();
+  const webgl = useWebGL("webgl");
+  /** Same breakpoint as the hero's mobile layout in counter-hero.css. */
+  const small = useMediaQuery("(max-width: 760px)");
 
-  const showAurora = !reduced && webgl;
+  const showAurora = motion && webgl;
   if (!showAurora) return null;
 
   return (

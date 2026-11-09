@@ -9,7 +9,8 @@
   --counter-display: var(--counter-system);
   --counter-body: var(--counter-system);
   margin: 0;
-  background: var(--counter-paper);
+  /* Transparent so the page's moving mesh shows through; the body underneath is white. */
+  background: transparent;
   color: var(--counter-ink);
   color-scheme: only light;
   font: 400 16px/1.5 var(--counter-body);
