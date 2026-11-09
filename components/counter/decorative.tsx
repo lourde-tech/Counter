@@ -3,10 +3,11 @@
 import { Component, useSyncExternalStore, type ReactNode } from "react";
 
 /*
- * Shared guards for the landing page's decorative WebGL effects (the aurora
- * ribbons in the photo and the moving mesh background). Each effect mounts
- * only in the browser, only when motion is allowed and the needed WebGL
- * version exists, and inside an error boundary that renders nothing if the
+ * Shared guards for the landing page's decorative WebGL effects: the aurora
+ * ribbons in the hero photo, and the glass folds in the "How it works" panel.
+ * The ribbons mount only in the browser, only when motion is allowed and WebGL
+ * exists. The glass draws one still frame when motion is reduced and nothing
+ * without WebGL. Both sit inside an error boundary that renders nothing if the
  * effect fails. The page underneath is complete without them.
  */
 
