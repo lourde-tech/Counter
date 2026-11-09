@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import AppShell from "@/components/counter/AppShell";
 import PrepPage from "@/components/counter/PrepPage";
 
 // Team only. Not linked from anywhere.
@@ -7,5 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <PrepPage />;
+  return (
+    <AppShell>
+      <PrepPage />
+    </AppShell>
+  );
 }

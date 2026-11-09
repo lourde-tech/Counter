@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import AppShell from "@/components/counter/AppShell";
 import StepFlow from "@/components/counter/StepFlow";
 
 export const metadata: Metadata = {
@@ -6,5 +7,9 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <StepFlow />;
+  return (
+    <AppShell>
+      <StepFlow />
+    </AppShell>
+  );
 }

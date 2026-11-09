@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { DM_Sans, Space_Grotesk } from "next/font/google";
-import Footer from "@/components/counter/Footer";
 import "./globals.css";
 
 const display = Space_Grotesk({
@@ -30,12 +29,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${display.variable} ${sans.variable}`}>
-      <body className="bg-paper text-ink font-sans antialiased">
-        <div className="mx-auto flex min-h-dvh max-w-xl flex-col px-4 pb-24">
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </div>
-      </body>
+      <body className="bg-paper text-ink font-sans antialiased">{children}</body>
     </html>
   );
 }
