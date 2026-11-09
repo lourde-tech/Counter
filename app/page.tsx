@@ -25,7 +25,7 @@ export default function Home() {
   return (
     <div className="flex min-h-dvh flex-col">
       <header className={`${column} w-full`}>
-        <div className="border-b border-lavender pt-[15px] pb-[13px] font-display text-[27px] leading-[1.2] font-bold tracking-[-0.065em]">
+        <div className="border-b border-lavender pt-[15px] pb-[13px] font-system text-[27px] leading-[1.2] font-bold tracking-[-0.035em]">
           Counter<span className="text-violet">.</span>
         </div>
       </header>

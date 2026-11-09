@@ -19,6 +19,8 @@
 @theme inline {
   --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  /* Apple-style system stack used by the landing hero and its header. */
+  --font-system: -apple-system, BlinkMacSystemFont, Inter, system-ui, sans-serif;
 }
 
 html {

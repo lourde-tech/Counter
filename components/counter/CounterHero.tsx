@@ -54,7 +54,7 @@ export function CounterHero({ sampleHref }: CounterHeroProps) {
               </div>
               <div className="counter-hero__listings">
                 <p>Sample nearby listings</p>
-                <div><span>$1,895</span><span>$1,950</span><span>$1,990</span><small>/ mo</small></div>
+                <div><span>$1,895</span><span>$1,950</span><span>$1,990 <small>/ mo</small></span></div>
               </div>
               <p className="counter-hero__choice-heading" id="counter-ask-title">Choose what to ask for</p>
               <div className="counter-hero__choices" role="group" aria-labelledby="counter-ask-title">
