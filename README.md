@@ -14,7 +14,7 @@ anything.
 | `/prep`     | Team only   | Enter the unit and 0–3 verified listings, get a `/c#…` link and a QR code. Not linked anywhere. |
 | `/prep#…`   | Team only   | Paste a case payload after `#` to reopen and fix it.                                      |
 | `/c#…`      | Renter      | Welcome → offer → evidence → ask → message → decision.                                     |
-| `/`         | Anyone      | A short note pointing renters to their link.                                              |
+| `/`         | Anyone      | Public landing page with an interactive, illustrative renewal example and a sample case. |
 
 ## Privacy
 

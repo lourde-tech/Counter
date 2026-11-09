@@ -1,4 +1,6 @@
 @import "tailwindcss";
+/* Landing hero (from the Counter hero kit). Every rule is scoped under .counter-hero. */
+@import "../components/counter/counter-hero.css";
 
 /*
  * Counter palette. Violet is the single accent hue; every shade is used at full
