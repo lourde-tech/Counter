@@ -421,6 +421,33 @@
   .counter-hero__choice[aria-pressed="true"] .counter-hero__choice-details { gap: 1px; margin-top: 2px; font-size: 6px; }
   .counter-hero__phone .counter-hero__ask-amount { font-size: 12px; }
   .counter-hero__phone .counter-hero__choice-feature { font-size: 8.5px; }
+
+  /*
+   * Taller phone: same width, about 2.3 times as tall, still centered on the
+   * photo's left edge (the scene centers it vertically). The screen is a column,
+   * so the extra height becomes breathing room and the home indicator sits at
+   * the bottom. Type sizes are unchanged.
+   */
+  .counter-hero__phone {
+    display: flex;
+    aspect-ratio: 1 / 2.3;
+  }
+  .counter-hero__phone-screen {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 4px 6px 6px;
+  }
+  .counter-hero__island { flex: none; margin-bottom: 6px; }
+  .counter-hero__progress { flex: none; margin: 4px 0 11px; }
+  .counter-hero__renewal { padding: 7px 6px; }
+  .counter-hero__renewal dl { gap: 4px; margin-top: 5px; }
+  .counter-hero__listings { margin-top: 13px; padding: 0 0 10px; }
+  .counter-hero__listings div { margin-top: 4px; }
+  .counter-hero__phone .counter-hero__choice-heading { margin: 13px 0 6px; }
+  .counter-hero__choices { gap: 6px; margin-bottom: 12px; }
+  .counter-hero__phone .counter-hero__choice[aria-pressed="true"] { min-height: 50px; padding: 4px 5px; }
+  .counter-hero__home-indicator { flex: none; margin-top: auto; }
 }
 
 @media (max-width: 760px) {
