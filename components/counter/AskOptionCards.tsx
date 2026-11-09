@@ -46,8 +46,8 @@ export default function AskOptionCards({ options, selected, onSelect, renter, su
           return (
             <div
               key={o.type}
-              className={`rounded-2xl border bg-white/60 transition-colors duration-200 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-ember ${
-                checked ? "border-ink bg-white ring-1 ring-ink" : "border-line hover:bg-white"
+              className={`rounded-2xl border transition-colors duration-200 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-violet-deep ${
+                checked ? "border-violet bg-lavender ring-1 ring-violet" : "border-ink bg-paper hover:bg-lavender"
               }`}
             >
               <label className="flex cursor-pointer gap-3 p-5">
@@ -62,34 +62,34 @@ export default function AskOptionCards({ options, selected, onSelect, renter, su
                 <span
                   aria-hidden
                   className={`mt-1 flex size-5 shrink-0 items-center justify-center rounded-full border-2 ${
-                    checked ? "border-ink" : "border-line"
+                    checked ? "border-violet" : "border-ink"
                   }`}
                 >
-                  {checked && <span className="size-2.5 rounded-full bg-ink" />}
+                  {checked && <span className="size-2.5 rounded-full bg-violet" />}
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-                    <span className="font-medium">{ASK_LABELS[o.type]}</span>
+                    <span className="font-display font-medium">{ASK_LABELS[o.type]}</span>
                     {showRent && (
                       <span className={`${figure} text-lg font-semibold`}>
                         {formatMoney(o.rent!)}
-                        <span className="text-sm font-normal text-slate">/mo</span>
+                        <span className="text-[13px] font-medium text-ink">/mo</span>
                       </span>
                     )}
                   </span>
                   {suggested && (
-                    <span className="mt-2 inline-block rounded-full bg-ink px-2.5 py-0.5 text-xs font-medium text-paper">
+                    <span className="mt-2 inline-block rounded-full bg-ink px-2.5 py-0.5 font-display text-[13px] font-medium text-paper">
                       Suggested
                     </span>
                   )}
-                  <span className="mt-1.5 block text-sm text-slate">{description(o.type, renter)}</span>
+                  <span className="mt-1.5 block text-sm text-ink">{description(o.type, renter)}</span>
                   {suggested && suggestionReason && <span className="mt-1.5 block text-sm text-ink">{suggestionReason}</span>}
                   {o.savingsLine && <span className="mt-2 block text-sm text-ink">{o.savingsLine}</span>}
                 </span>
               </label>
 
               {o.type === "perk_instead" && checked && (
-                <fieldset className="border-t border-line px-5 pt-4 pb-5">
+                <fieldset className="border-t border-ink px-5 pt-4 pb-5">
                   <legend className="float-left mb-2 w-full text-sm font-medium">Pick one perk</legend>
                   <div className="clear-left flex flex-wrap gap-2">
                     {PERKS.map((perk: Perk) => {
@@ -97,8 +97,8 @@ export default function AskOptionCards({ options, selected, onSelect, renter, su
                       return (
                         <label
                           key={perk}
-                          className={`inline-flex min-h-11 cursor-pointer items-center rounded-full border px-4 text-sm transition-colors duration-200 has-focus-visible:outline-2 has-focus-visible:outline-ember ${
-                            on ? "border-ink bg-ink text-paper" : "border-ink/15 hover:bg-sand"
+                          className={`inline-flex min-h-11 cursor-pointer items-center rounded-full border px-4 font-display text-sm font-medium transition-colors duration-200 has-focus-visible:outline-2 has-focus-visible:outline-violet-deep ${
+                            on ? "border-violet bg-violet text-paper" : "border-ink bg-paper hover:bg-lavender"
                           }`}
                         >
                           <input

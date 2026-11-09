@@ -27,7 +27,7 @@ export default function CopyButton({ text, onCopied, onFailed }: Props) {
       <button type="button" onClick={handleClick} className={btnPrimary}>
         {status === "copied" ? "Copied" : "Copy message"}
       </button>
-      <p aria-live="polite" className="mt-2 min-h-5 text-center text-sm text-slate">
+      <p aria-live="polite" className="mt-2 min-h-5 text-center text-sm text-ink">
         {status === "copied" && "Copied. Paste it into a text or an email to your landlord."}
         {status === "failed" && "Couldn't copy automatically. The message is selected: press and hold it to copy."}
       </p>

@@ -4,7 +4,7 @@ import { heading } from "./styles";
 export default function StepHeading({ children, kicker }: { children: React.ReactNode; kicker?: string }) {
   return (
     <div className="mb-6">
-      {kicker && <p className="mb-2 text-sm font-medium text-ember">{kicker}</p>}
+      {kicker && <p className="mb-2 font-display text-[13px] font-medium text-violet-deep">{kicker}</p>}
       <h1 tabIndex={-1} ref={(el) => el?.focus({ preventScroll: true })} className={`${heading} outline-none`}>
         {children}
       </h1>

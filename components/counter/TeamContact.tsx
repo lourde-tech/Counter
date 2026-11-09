@@ -6,7 +6,7 @@ export default function TeamContact() {
   const href = contactHref(TEAM_CONTACT);
   if (!href) return <span className="font-medium">{TEAM_CONTACT}</span>;
   return (
-    <a href={href} className="font-medium text-ink underline underline-offset-4 hover:text-ember">
+    <a href={href} className="font-medium text-ink underline underline-offset-4 hover:text-violet-deep">
       {TEAM_CONTACT}
     </a>
   );

@@ -25,7 +25,7 @@ export default function ListingFields({ index, value, onChange, onRemove, errors
   const set = (key: keyof ListingDraft) => (v: string) => onChange({ ...value, [key]: v });
 
   return (
-    <fieldset className="rounded-2xl border border-line bg-white/60 p-5">
+    <fieldset className="rounded-2xl border border-ink bg-paper p-5">
       <div className="flex items-center justify-between">
         <legend className="font-display text-lg font-semibold">Listing {index + 1}</legend>
         <button type="button" onClick={onRemove} className={`${btnText} -mr-2 text-sm`}>
@@ -37,7 +37,6 @@ export default function ListingFields({ index, value, onChange, onRemove, errors
         <Field
           label="Street or block"
           hint="Reads “a 2BR/1BA on ___” in the renter's message. No exact address."
-          placeholder="Spruce St"
           value={value.label}
           onValueChange={set("label")}
           error={errors.label}
@@ -60,7 +59,7 @@ export default function ListingFields({ index, value, onChange, onRemove, errors
         />
         <Field
           label="Source name"
-          placeholder="Zillow"
+          hint="e.g. Zillow"
           value={value.sourceName}
           onValueChange={set("sourceName")}
           error={errors.sourceName}
@@ -70,7 +69,6 @@ export default function ListingFields({ index, value, onChange, onRemove, errors
           label="Listing URL"
           type="url"
           inputMode="url"
-          placeholder="https://"
           value={value.url}
           onValueChange={set("url")}
           error={errors.url}
@@ -87,7 +85,6 @@ export default function ListingFields({ index, value, onChange, onRemove, errors
           <Field
             label="Checked by"
             hint="Initials"
-            placeholder="JW"
             maxLength={6}
             value={value.checkedBy}
             onValueChange={set("checkedBy")}

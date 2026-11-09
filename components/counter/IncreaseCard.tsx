@@ -1,9 +1,11 @@
 import type { Increase } from "@/lib/compare";
 import { formatMoney, formatPct } from "@/lib/format";
-import { card, figure } from "./styles";
+import { card, figure, rowLabel } from "./styles";
 
+/** Positive deltas in deep violet; zero or negative deltas stay ink. */
 export default function IncreaseCard({ increase }: { increase: Increase }) {
   const { amount, pct, overLease, current, proposed, leaseMonths } = increase;
+  const deltaColor = amount > 0 ? "text-violet-deep" : "text-ink";
 
   let parts: string[];
   if (amount > 0) {
@@ -16,18 +18,20 @@ export default function IncreaseCard({ increase }: { increase: Increase }) {
 
   return (
     <section className={card} aria-label="Your increase">
-      <p className="text-sm font-medium text-slate">{amount > 0 ? "Your increase" : "Your renewal offer"}</p>
-      <p className={`${figure} mt-2 text-xl leading-snug font-semibold`}>
+      <p className={rowLabel}>{amount > 0 ? "Your increase" : "Your renewal offer"}</p>
+      <p className={`${figure} mt-2 text-xl leading-snug font-semibold`} data-delta={amount > 0 ? "positive" : amount < 0 ? "negative" : "zero"}>
         {parts.map((p, i) => (
           <span key={p}>
-            {i > 0 && <span className="px-1.5 font-normal text-slate">·</span>}
-            <span className={i === 0 && amount > 0 ? "text-ember" : undefined}>{p}</span>
+            {/* Real spaces around the dot so the line can wrap on narrow screens. */}
+            {i > 0 && <span className="font-normal text-ink"> · </span>}
+            <span data-part className={deltaColor}>{p}</span>
           </span>
         ))}
       </p>
-      <p className="mt-2 text-sm text-slate">
-        From <span className={figure}>{formatMoney(current)}</span> to{" "}
-        <span className={figure}>{formatMoney(proposed)}</span> a month, on a {leaseMonths}{"‑"}month lease.
+      <p className="mt-2 text-sm text-ink">
+        From <span className={`${figure} text-ink`}>{formatMoney(current)}</span> to{" "}
+        <span className={`${figure} text-ink`}>{formatMoney(proposed)}</span> a month, on a {leaseMonths}
+        {"‑"}month lease.
       </p>
     </section>
   );

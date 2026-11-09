@@ -4,7 +4,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import type { RentRange } from "@/lib/compare";
 import { formatMoney } from "@/lib/format";
 import type { Listing } from "@/lib/types";
-import { card, figure } from "./styles";
+import { figure, panel, rowLabel } from "./styles";
 
 interface Props {
   current: number;
@@ -15,7 +15,7 @@ interface Props {
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-/** Horizontal dot plot: listings are mist dots, current rent an ink tick, the new rent an ember tick. */
+/** Horizontal dot plot: listings are violet dots, current rent an ink tick, the new rent a deep violet tick. */
 export default function OfferVsListings({ current, proposed, listings, range }: Props) {
   const reduce = useReducedMotion();
   const rents = listings.map((l) => l.advertisedRent);
@@ -34,14 +34,14 @@ export default function OfferVsListings({ current, proposed, listings, range }: 
   ].join(" ");
 
   return (
-    <section className={card} aria-label="Your offer compared with the listings">
-      <h2 className="text-sm font-medium text-slate">Your offer vs. the listings</h2>
+    <section className={panel} aria-label="Your offer compared with the listings">
+      <h2 className={rowLabel}>Your offer vs. the listings</h2>
 
-      <div className="relative mt-4 h-28" role="img" aria-label={summary}>
-        <div className="absolute inset-x-0 top-1/2 h-px bg-line" />
+      <div className="relative mt-2 h-28" role="img" aria-label={summary}>
+        <div className="absolute inset-x-0 top-1/2 h-px bg-ink" />
 
         <Tick x={x(current)} color="bg-ink" label="Now" value={current} side="above" />
-        <Tick x={x(proposed)} color="bg-ember" label="New" value={proposed} side="below" />
+        <Tick x={x(proposed)} color="bg-violet-deep" label="New" value={proposed} side="below" />
 
         {listings.map((l, i) => (
           <span
@@ -50,7 +50,7 @@ export default function OfferVsListings({ current, proposed, listings, range }: 
             style={{ left: `${x(l.advertisedRent)}%` }}
           >
             <motion.span
-              className="block size-3.5 rounded-full bg-mist ring-2 ring-white"
+              className="block size-3.5 rounded-full bg-violet ring-2 ring-paper"
               initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.4 }}
               animate={reduce ? { opacity: 1 } : { opacity: 1, scale: 1 }}
               transition={{ delay: 0.15 + i * 0.06, duration: 0.3, ease: EASE }}
@@ -59,14 +59,14 @@ export default function OfferVsListings({ current, proposed, listings, range }: 
         ))}
 
         {listings.length === 0 && (
-          <p className="absolute inset-x-0 bottom-0 text-center text-xs text-slate">No listings to plot.</p>
+          <p className={`absolute inset-x-0 bottom-0 text-center ${rowLabel}`}>No listings to plot.</p>
         )}
       </div>
 
-      <ul className="mt-4 space-y-2 text-sm text-slate">
+      <ul className={`mt-2 flex flex-col gap-[6px] ${rowLabel}`}>
         {range && (
           <li className="flex items-center gap-2">
-            <span className="size-3 shrink-0 rounded-full bg-mist" aria-hidden />
+            <span className="size-3 shrink-0 rounded-full bg-violet" aria-hidden />
             {listings.length === 1 ? (
               <span>
                 The listing our team found: <span className={`${figure} text-ink`}>{formatMoney(range.min)}</span>
@@ -81,7 +81,7 @@ export default function OfferVsListings({ current, proposed, listings, range }: 
         )}
         {range && listings.length > 1 && (
           <li className="flex items-center gap-2">
-            <span className="size-3 shrink-0 rounded-full border-2 border-mist" aria-hidden />
+            <span className="size-3 shrink-0 rounded-full border-2 border-violet" aria-hidden />
             <span>
               Middle of the listings: <span className={`${figure} text-ink`}>{formatMoney(range.median)}</span>
             </span>
@@ -94,7 +94,7 @@ export default function OfferVsListings({ current, proposed, listings, range }: 
           </span>
         </li>
         <li className="flex items-center gap-2">
-          <span className="ml-[5px] mr-[5px] h-3.5 w-0.5 shrink-0 bg-ember" aria-hidden />
+          <span className="ml-[5px] mr-[5px] h-3.5 w-0.5 shrink-0 bg-violet-deep" aria-hidden />
           <span>
             New rent: <span className={`${figure} text-ink`}>{formatMoney(proposed)}</span>
           </span>
@@ -111,11 +111,11 @@ function Tick({ x, color, label, value, side }: { x: number; color: string; labe
     <>
       <span className={`absolute top-1/2 h-7 w-0.5 -translate-x-1/2 -translate-y-1/2 ${color}`} style={{ left: `${x}%` }} />
       <span
-        className={`absolute whitespace-nowrap text-xs ${side === "above" ? "top-0" : "bottom-0"}`}
+        className={`absolute whitespace-nowrap ${rowLabel} ${side === "above" ? "top-0" : "bottom-0"}`}
         style={{ left: `${x}%`, transform: `translateX(${shift})` }}
       >
-        <span className="text-slate">{label} </span>
-        <span className={`${figure} font-medium ${side === "below" ? "text-ember" : "text-ink"}`}>{formatMoney(value)}</span>
+        <span className="text-ink">{label} </span>
+        <span className={`${figure} text-ink`}>{formatMoney(value)}</span>
       </span>
     </>
   );

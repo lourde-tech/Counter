@@ -45,19 +45,19 @@ export default function MessageStep(props: Props) {
   return (
     <div>
       <StepHeading>Your message</StepHeading>
-      <p className="-mt-3 mb-6 text-slate">
+      <p className="-mt-3 mb-6 text-ink">
         Edit anything. Counter never sends it. You do, if and when you want to.
       </p>
 
       <ToneToggle tone={pendingTone ?? tone} onChange={requestTone} />
 
       {pendingTone && (
-        <div className="mt-3 rounded-2xl border border-line bg-sand p-4" role="alertdialog" aria-label="Replace your edits?">
+        <div className="mt-3 rounded-2xl border border-ink bg-paper p-4" role="alertdialog" aria-label="Replace your edits?">
           <p>Switching tone will replace your edits with a new draft.</p>
           <div className="mt-3 flex gap-2">
             <button
               type="button"
-              className="h-11 flex-1 rounded-full bg-ink text-paper font-medium hover:bg-ember transition-colors duration-200"
+              className="h-11 flex-1 rounded-full bg-violet font-display font-medium text-paper hover:bg-violet-deep transition-colors duration-200"
               onClick={() => {
                 onToneChange(pendingTone);
                 setPendingTone(null);
@@ -67,7 +67,7 @@ export default function MessageStep(props: Props) {
             </button>
             <button
               type="button"
-              className="h-11 flex-1 rounded-full border border-ink/15 hover:bg-white transition-colors duration-200"
+              className="h-11 flex-1 rounded-full border border-ink bg-paper font-display font-medium text-ink hover:bg-lavender transition-colors duration-200"
               onClick={() => setPendingTone(null)}
             >
               Keep my edits
@@ -77,7 +77,7 @@ export default function MessageStep(props: Props) {
       )}
 
       {redrafted && (
-        <p className="mt-3 rounded-2xl border border-line bg-sand p-4 text-sm" role="status">
+        <p className="mt-3 rounded-2xl border border-ink bg-paper p-4 text-sm" role="status">
           You changed your ask, so this is a fresh draft for it. Your earlier edits were replaced.
         </p>
       )}

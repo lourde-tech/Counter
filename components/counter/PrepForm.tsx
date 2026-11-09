@@ -154,7 +154,7 @@ export default function PrepForm({ initial }: { initial: CasePrep | null }) {
   return (
     <form onSubmit={create} noValidate className="pt-8">
       <StepHeading kicker="Team only">Prep a case</StepHeading>
-      <p className="-mt-3 mb-8 text-slate">
+      <p className="-mt-3 mb-8 text-ink">
         Enter only listings you checked by hand. The link carries everything in its <code>#</code> part, which never
         reaches a server.
       </p>
@@ -163,7 +163,7 @@ export default function PrepForm({ initial }: { initial: CasePrep | null }) {
         <h2 className="font-display text-lg font-semibold">The renter&apos;s unit</h2>
         <Field
           label="Case code"
-          placeholder="C01"
+          hint="e.g. C01"
           value={draft.caseCode}
           onValueChange={set("caseCode")}
           error={errors.caseCode}
@@ -187,7 +187,7 @@ export default function PrepForm({ initial }: { initial: CasePrep | null }) {
       <section className="mt-10 space-y-4">
         <h2 className="font-display text-lg font-semibold">Verified listings ({draft.listings.length} of {MAX_LISTINGS})</h2>
         {draft.listings.length === 0 && (
-          <p className="text-slate">No listings. The renter will see the limited-evidence path and a general inquiry.</p>
+          <p className="text-ink">No listings. The renter will see the limited-evidence path and a general inquiry.</p>
         )}
         {draft.listings.map((l, i) => (
           <ListingFields
@@ -210,7 +210,7 @@ export default function PrepForm({ initial }: { initial: CasePrep | null }) {
         <label htmlFor="team-note" className={label}>
           Note to the renter (optional)
         </label>
-        <p className="mt-1 text-sm text-slate">Shown on the evidence screen. Don&apos;t include anything private.</p>
+        <p className="mt-1 text-sm text-ink">Shown on the evidence screen. Don&apos;t include anything private.</p>
         <textarea
           id="team-note"
           value={draft.teamNote}
@@ -226,7 +226,7 @@ export default function PrepForm({ initial }: { initial: CasePrep | null }) {
         Create link
       </button>
       {errorCount > 0 && (
-        <p className="mt-2 text-center text-sm text-ember" role="alert">
+        <p className="mt-2 text-center text-sm text-violet-deep" role="alert">
           Fix {errorCount === 1 ? "the field" : `the ${errorCount} fields`} marked above.
         </p>
       )}
@@ -234,19 +234,19 @@ export default function PrepForm({ initial }: { initial: CasePrep | null }) {
       {output && (
         <section className={`${card} mt-8 space-y-4`} aria-live="polite">
           <h2 className="font-display text-lg font-semibold">Link for case {draft.caseCode.trim()}</h2>
-          <p className="break-all rounded-xl bg-sand p-3 font-mono text-xs leading-relaxed">{output.url}</p>
+          <p className="break-all rounded-xl border border-ink bg-paper p-3 font-mono text-xs leading-relaxed">{output.url}</p>
           <button type="button" onClick={copyLink} className={btnPrimary}>
             {copied === "copied" ? "Copied" : "Copy link"}
           </button>
-          {copied === "failed" && <p className="text-sm text-ember">Couldn&apos;t copy. Press and hold the link above.</p>}
+          {copied === "failed" && <p className="text-sm text-violet-deep">Couldn&apos;t copy. Press and hold the link above.</p>}
           <a href={output.url} target="_blank" rel="noopener noreferrer" className={btnSecondary}>
             Open it as the renter
           </a>
           {/* eslint-disable-next-line @next/next/no-img-element -- data URL, nothing to optimize */}
-          <img src={output.qr} alt="QR code for the renter link" className="mx-auto w-full max-w-72 rounded-xl border border-line" />
-          <p className="text-center text-sm text-slate">If the QR code is hard to scan, send the link instead.</p>
+          <img src={output.qr} alt="QR code for the renter link" className="mx-auto w-full max-w-72 rounded-xl border border-ink" />
+          <p className="text-center text-sm text-ink">If the QR code is hard to scan, send the link instead.</p>
           {output.flags.length > 0 ? (
-            <div className="rounded-xl bg-ember-soft p-4 text-sm">
+            <div className="rounded-xl border border-violet-deep bg-lavender p-4 text-sm">
               <p className="font-medium">The renter will see the limited-evidence path:</p>
               <ul className="mt-1 list-disc pl-5">
                 {output.flags.map((f) => (
@@ -255,7 +255,7 @@ export default function PrepForm({ initial }: { initial: CasePrep | null }) {
               </ul>
             </div>
           ) : (
-            <p className="text-sm text-slate">The evidence isn&apos;t thin, so the renter won&apos;t see the limited-evidence note.</p>
+            <p className="text-sm text-ink">The evidence isn&apos;t thin, so the renter won&apos;t see the limited-evidence note.</p>
           )}
         </section>
       )}

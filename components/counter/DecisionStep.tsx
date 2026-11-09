@@ -45,18 +45,18 @@ export default function DecisionStep({ session, caseCode, thinEvidence, onDecisi
             return (
               <label
                 key={d}
-                className={`flex min-h-14 cursor-pointer items-center gap-3 rounded-2xl border px-5 transition-colors duration-200 has-focus-visible:outline-2 has-focus-visible:outline-ember ${
-                  on ? "border-ink bg-white ring-1 ring-ink" : "border-line bg-white/60 hover:bg-white"
+                className={`flex min-h-14 cursor-pointer items-center gap-3 rounded-2xl border px-5 transition-colors duration-200 has-focus-visible:outline-2 has-focus-visible:outline-violet-deep ${
+                  on ? "border-violet bg-lavender ring-1 ring-violet" : "border-ink bg-paper hover:bg-lavender"
                 }`}
               >
                 <input type="radio" name={name} checked={on} onChange={() => onDecision(d)} className="sr-only" />
                 <span
                   aria-hidden
-                  className={`flex size-5 shrink-0 items-center justify-center rounded-full border-2 ${on ? "border-ink" : "border-line"}`}
+                  className={`flex size-5 shrink-0 items-center justify-center rounded-full border-2 ${on ? "border-violet" : "border-ink"}`}
                 >
-                  {on && <span className="size-2.5 rounded-full bg-ink" />}
+                  {on && <span className="size-2.5 rounded-full bg-violet" />}
                 </span>
-                <span className="font-medium">{DECISION_LABELS[d]}</span>
+                <span className="font-display font-medium">{DECISION_LABELS[d]}</span>
               </label>
             );
           })}
@@ -87,12 +87,12 @@ export default function DecisionStep({ session, caseCode, thinEvidence, onDecisi
             </button>
           )
         ) : (
-          <p className="rounded-2xl border border-line bg-sand p-4">
+          <p className="rounded-2xl border border-ink bg-paper p-4">
             Let the Counter team know what you decided: message <TeamContact />.
           </p>
         )}
         {feedbackUrl && (
-          <p className="mt-3 text-sm text-slate">
+          <p className="mt-3 text-sm text-ink">
             Opens a short form with only your choices on this page. No rents, names, listings or message text. You
             submit it yourself.
           </p>

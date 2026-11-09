@@ -35,7 +35,7 @@ export default function OfferStep({ draft, onDraftChange, onContinue }: Props) {
   return (
     <form onSubmit={submit} noValidate>
       <StepHeading>Your offer</StepHeading>
-      <p className="-mt-3 mb-6 text-slate">From your renewal letter or email. This stays on this page.</p>
+      <p className="-mt-3 mb-6 text-ink">From your renewal letter or email. This stays on this page.</p>
 
       <div className="space-y-5">
         <Field
@@ -44,7 +44,6 @@ export default function OfferStep({ draft, onDraftChange, onContinue }: Props) {
           suffix="/mo"
           inputMode="decimal"
           autoComplete="off"
-          placeholder="1,500"
           value={draft.currentRent}
           onValueChange={set("currentRent")}
           error={shown.currentRent}
@@ -55,14 +54,13 @@ export default function OfferStep({ draft, onDraftChange, onContinue }: Props) {
           suffix="/mo"
           inputMode="decimal"
           autoComplete="off"
-          placeholder="1,650"
           value={draft.proposedRent}
           onValueChange={set("proposedRent")}
           error={shown.proposedRent}
         />
 
         {noIncrease && (
-          <p className="rounded-2xl border border-line bg-sand p-4" role="status">
+          <p className="rounded-2xl border border-ink bg-paper p-4" role="status">
             No increase? You can still ask about terms.
           </p>
         )}
@@ -79,9 +77,9 @@ export default function OfferStep({ draft, onDraftChange, onContinue }: Props) {
         />
       </div>
 
-      <div className="mt-10 border-t border-line pt-6">
+      <div className="mt-10 border-t border-ink pt-6">
         <h2 className="font-display text-lg font-semibold">A bit more, if you want</h2>
-        <p className="mt-1 text-sm text-slate">Optional. Only used to word your message.</p>
+        <p className="mt-1 text-sm text-ink">Optional. Only used to word your message.</p>
 
         <div className="mt-5 space-y-5">
           <fieldset>
@@ -146,7 +144,7 @@ export default function OfferStep({ draft, onDraftChange, onContinue }: Props) {
           See the evidence
         </button>
         {tried && !renter && (
-          <p className="mt-2 text-center text-sm text-ember" role="alert">
+          <p className="mt-2 text-center text-sm text-violet-deep" role="alert">
             Check the fields marked above.
           </p>
         )}

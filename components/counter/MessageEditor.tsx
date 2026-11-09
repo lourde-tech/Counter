@@ -34,7 +34,7 @@ export default function MessageEditor({ subject, body, onChange, bodyRef }: Prop
           <label htmlFor={bodyId} className={label}>
             Message
           </label>
-          <span className="text-xs text-slate tabular-nums">{words} words</span>
+          <span className="font-display text-[13px] font-medium text-ink tabular-nums">{words} words</span>
         </div>
         <textarea
           id={bodyId}
@@ -42,10 +42,10 @@ export default function MessageEditor({ subject, body, onChange, bodyRef }: Prop
           value={body}
           onChange={(e) => onChange({ subject, body: e.target.value })}
           rows={18}
-          className="mt-1.5 block w-full resize-y rounded-xl border border-line bg-white p-3 text-base leading-relaxed text-ink focus:border-ink focus:outline-none [field-sizing:content] min-h-80"
+          className="mt-1.5 block w-full resize-y rounded-xl border border-ink bg-paper p-3 text-base leading-relaxed text-ink [field-sizing:content] min-h-80"
         />
         {hasPlaceholder && (
-          <p className="mt-2 text-sm text-ember">
+          <p className="mt-2 text-sm text-violet-deep">
             Replace {SIGN_OFF_PLACEHOLDER} with your name and unit before you send it.
           </p>
         )}

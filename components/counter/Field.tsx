@@ -30,7 +30,7 @@ export default function Field({ label, hint, error, prefix, suffix, value, onVal
       </label>
       <div className="relative mt-1.5">
         {prefix && (
-          <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate">{prefix}</span>
+          <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-ink">{prefix}</span>
         )}
         <input
           id={id}
@@ -42,7 +42,7 @@ export default function Field({ label, hint, error, prefix, suffix, value, onVal
           {...rest}
         />
         {suffix && (
-          <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-sm text-slate">{suffix}</span>
+          <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center font-display text-[13px] font-medium text-ink">{suffix}</span>
         )}
       </div>
       {hint && (

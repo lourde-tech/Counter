@@ -1,14 +1,16 @@
 @import "tailwindcss";
 
+/*
+ * Counter palette. Violet is the single accent hue; every shade is used at full
+ * opacity. Tailwind's default colors are cleared so only these can be used.
+ */
 @theme {
-  --color-paper: #F5F2EA;
-  --color-ink: #121722;
-  --color-slate: #4D5462;
-  --color-line: #DDD7CA;
-  --color-sand: #E9E3D6;
-  --color-ember: #C2410C;
-  --color-ember-soft: #FBE3D3;
-  --color-mist: #9DB4D3;
+  --color-*: initial;
+  --color-paper: #FFFFFF;
+  --color-ink: #000000;
+  --color-violet: #6638D8;
+  --color-violet-deep: #4E24AF;
+  --color-lavender: #F1EBFF;
 }
 
 /* next/font sets --font-space-grotesk and --font-dm-sans on <html>. */
@@ -18,6 +20,8 @@
 }
 
 html {
+  /* Light only: stops phones in dark mode from recoloring the page. */
+  color-scheme: only light;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
 }
@@ -30,11 +34,11 @@ body {
 /* In the base layer so utilities like outline-none can still override it. */
 @layer base {
   :focus-visible {
-    outline: 2px solid var(--color-ember);
+    outline: 2px solid var(--color-violet-deep);
     outline-offset: 2px;
   }
 
   ::selection {
-    background: var(--color-ember-soft);
+    background: var(--color-lavender);
   }
 }

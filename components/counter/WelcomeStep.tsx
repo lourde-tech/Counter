@@ -18,8 +18,8 @@ export default function WelcomeStep({ caseCode, onStart }: { caseCode: string; o
 
       <ol className="mt-8 space-y-3">
         {PROMISES.map((p, i) => (
-          <li key={p} className="flex items-center gap-4 rounded-2xl border border-line bg-white/60 p-4">
-            <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-sand font-display font-semibold tabular-nums">
+          <li key={p} className="flex items-center gap-4 rounded-2xl border border-ink bg-paper p-4">
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-ink bg-paper font-display font-semibold tabular-nums">
               {i + 1}
             </span>
             <span className="font-medium">{p}</span>
@@ -31,7 +31,7 @@ export default function WelcomeStep({ caseCode, onStart }: { caseCode: string; o
         <button type="button" onClick={onStart} className={btnPrimary}>
           Start
         </button>
-        <p className="mt-3 text-center text-sm text-slate">Case {caseCode}</p>
+        <p className="mt-3 text-center text-sm text-ink">Case {caseCode}</p>
       </div>
     </div>
   );

@@ -14,15 +14,15 @@ export default function StopReasons({ value, onChange }: { value: StopReason[]; 
           return (
             <label
               key={reason}
-              className={`flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border px-4 py-2 transition-colors duration-200 has-focus-visible:outline-2 has-focus-visible:outline-ember ${
-                on ? "border-ink bg-white" : "border-line bg-white/60 hover:bg-white"
+              className={`flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border px-4 py-2 transition-colors duration-200 has-focus-visible:outline-2 has-focus-visible:outline-violet-deep ${
+                on ? "border-violet bg-lavender" : "border-ink bg-paper hover:bg-lavender"
               }`}
             >
               <input type="checkbox" checked={on} onChange={() => toggle(reason)} className="sr-only" />
               <span
                 aria-hidden
                 className={`flex size-5 shrink-0 items-center justify-center rounded-md border-2 text-xs ${
-                  on ? "border-ink bg-ink text-paper" : "border-line"
+                  on ? "border-violet bg-violet text-paper" : "border-ink"
                 }`}
               >
                 {on && "✓"}

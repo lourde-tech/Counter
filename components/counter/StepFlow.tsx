@@ -27,7 +27,7 @@ export default function StepFlow() {
   const prep = useMemo(() => (hash === null ? undefined : decodeCase(hash)), [hash]);
 
   if (prep === undefined) {
-    return <p className="pt-16 text-center text-slate">Loading…</p>;
+    return <p className="pt-16 text-center text-ink">Loading…</p>;
   }
 
   if (prep === null) {

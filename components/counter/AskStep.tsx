@@ -26,9 +26,9 @@ export default function AskStep({ analysis, renter, selected, onSelect, onContin
   return (
     <div>
       <StepHeading>What do you want to ask for?</StepHeading>
-      <p className="-mt-3 mb-6 text-slate">Pick one. You&apos;ll see and edit the message next.</p>
+      <p className="-mt-3 mb-6 text-ink">Pick one. You&apos;ll see and edit the message next.</p>
 
-      {note && <p className="mb-4 rounded-2xl border border-line bg-sand p-4 text-sm">{note}</p>}
+      {note && <p className="mb-4 rounded-2xl border border-ink bg-paper p-4 text-sm">{note}</p>}
 
       <AskOptionCards
         options={analysis.options}
@@ -42,7 +42,7 @@ export default function AskStep({ analysis, renter, selected, onSelect, onContin
       <button type="button" onClick={onContinue} disabled={!ready} className={`${btnPrimary} mt-8`}>
         Write my message
       </button>
-      {needsPerk && <p className="mt-2 text-center text-sm text-slate">Pick a perk to continue.</p>}
+      {needsPerk && <p className="mt-2 text-center text-sm text-ink">Pick a perk to continue.</p>}
     </div>
   );
 }
