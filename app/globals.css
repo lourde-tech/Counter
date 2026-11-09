@@ -23,6 +23,13 @@
   --font-system: -apple-system, BlinkMacSystemFont, Inter, system-ui, sans-serif;
 }
 
+:root {
+  /* Hero aurora ribbons (components/ui/aurora-ribbons): Counter violet into a soft lavender tint. */
+  --counter-aurora-primary: var(--color-violet);
+  --counter-aurora-accent: var(--color-lavender);
+  --counter-aurora-muted: var(--color-lavender);
+}
+
 html {
   /* Light only: stops phones in dark mode from recoloring the page. */
   color-scheme: only light;

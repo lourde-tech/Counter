@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { mountCounterHero } from "./counter-hero.mjs";
+import HeroAurora from "./HeroAurora";
 
 type CounterHeroProps = { sampleHref?: string };
 
@@ -30,6 +31,8 @@ export function CounterHero({ sampleHref }: CounterHeroProps) {
           <div className="counter-hero__photo">
             {/* eslint-disable-next-line @next/next/no-img-element -- static export: no image optimizer, and the WebP is already sized */}
             <img src="/images/counter-rowhouses.webp" width={1040} height={1300} alt="" decoding="async" />
+            {/* Violet ribbons: above the photo, clipped to its rounded corners, below the connector and phone. */}
+            <HeroAurora />
           </div>
           <svg className="counter-hero__path" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
             <path className="counter-hero__path-track" d="M 89 27 V 39 Q 89 45 83 45 H 80 Q 76 45 76 51 V 57 H 48" vectorEffect="non-scaling-stroke"></path>
