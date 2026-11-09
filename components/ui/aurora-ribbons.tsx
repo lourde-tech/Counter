@@ -12,6 +12,7 @@ import {
   useShadcnTheme,
   type ThemeMode,
 } from "@/components/ui/aurora-ribbons-utils/use-shadcn-theme";
+import { loopedRibbonOffset } from "@/components/ui/aurora-ribbons-utils/loop-motion";
 
 const VERTEX_SHADER = /* glsl */ `
   varying vec2 vUv;
@@ -43,6 +44,7 @@ function Ribbon({
   colorA,
   colorB,
   isDark,
+  loopSeconds,
 }: {
   index: number;
   total: number;
@@ -51,6 +53,7 @@ function Ribbon({
   colorA: THREE.Color;
   colorB: THREE.Color;
   isDark: boolean;
+  loopSeconds?: number;
 }) {
   const meshRef = React.useRef<THREE.Mesh>(null);
   const materialRef = React.useRef<THREE.ShaderMaterial>(null);
@@ -75,7 +78,8 @@ function Ribbon({
     const material = materialRef.current;
     if (!mesh || !material) return;
 
-    const t = clock.getElapsedTime() * speed;
+    const elapsed = clock.getElapsedTime();
+    const t = elapsed * speed;
     const pos = mesh.geometry.getAttribute("position") as THREE.BufferAttribute;
 
     if (!baseYRef.current || baseYRef.current.length !== pos.count) {
@@ -85,13 +89,22 @@ function Ribbon({
     }
     const baseY = baseYRef.current;
 
-    for (let i = 0; i < pos.count; i++) {
-      const x = pos.getX(i);
-      const wave =
-        Math.sin(x * 0.5 + t * 0.8 + phase) * amplitude +
-        Math.sin(x * 0.85 - t * 0.5 + phase * 1.7) * amplitude * 0.35;
-      pos.setY(i, baseY[i] + wave + yOffset);
-      pos.setZ(i, Math.cos(x * 0.35 + t * 0.35 + phase) * 0.5);
+    if (loopSeconds) {
+      // Seamless loop (see loop-motion.ts): exactly periodic, no jump.
+      for (let i = 0; i < pos.count; i++) {
+        const { y, z } = loopedRibbonOffset(pos.getX(i), elapsed, loopSeconds, phase, amplitude);
+        pos.setY(i, baseY[i] + y + yOffset);
+        pos.setZ(i, z);
+      }
+    } else {
+      for (let i = 0; i < pos.count; i++) {
+        const x = pos.getX(i);
+        const wave =
+          Math.sin(x * 0.5 + t * 0.8 + phase) * amplitude +
+          Math.sin(x * 0.85 - t * 0.5 + phase * 1.7) * amplitude * 0.35;
+        pos.setY(i, baseY[i] + wave + yOffset);
+        pos.setZ(i, Math.cos(x * 0.35 + t * 0.35 + phase) * 0.5);
+      }
     }
     pos.needsUpdate = true;
     (material.uniforms.uColorA.value as THREE.Color).copy(colorA);
@@ -120,11 +133,13 @@ function Ribbons({
   speed,
   amplitude,
   theme,
+  loopSeconds,
 }: {
   ribbons: number;
   speed: number;
   amplitude: number;
   theme: ThemeMode;
+  loopSeconds?: number;
 }) {
   const { primaryColor, accentColor, mutedColor, isDark } =
     useShadcnTheme(theme);
@@ -141,6 +156,7 @@ function Ribbons({
           colorA={primaryColor}
           colorB={i % 2 ? mutedColor : accentColor}
           isDark={isDark}
+          loopSeconds={loopSeconds}
         />
       ))}
     </group>
@@ -157,6 +173,11 @@ export type AuroraRibbonsProps = {
   className?: string;
   theme?: ThemeMode;
   environment?: SceneContainerProps["environment"];
+  /**
+   * Counter addition: when set, the ribbons follow a seamless loop of this many
+   * seconds (speed is ignored). When omitted, the motion is the original.
+   */
+  loopSeconds?: number;
 };
 
 /**
@@ -170,6 +191,7 @@ export function AuroraRibbons({
   className,
   theme = "auto",
   environment = "night",
+  loopSeconds,
 }: AuroraRibbonsProps) {
   return (
     <SceneContainer
@@ -184,6 +206,7 @@ export function AuroraRibbons({
         speed={speed}
         amplitude={amplitude}
         theme={theme}
+        loopSeconds={loopSeconds}
       />
     </SceneContainer>
   );

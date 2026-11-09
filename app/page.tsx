@@ -1,4 +1,3 @@
-import CounterMeshBackdrop from "@/components/counter/CounterMeshBackdrop";
 import Footer from "@/components/counter/Footer";
 import LandingHero from "@/components/counter/LandingHero";
 import TeamContact from "@/components/counter/TeamContact";
@@ -24,10 +23,7 @@ const column = "mx-auto max-w-[1240px] px-[clamp(16px,3.5vw,52px)]";
 
 export default function Home() {
   return (
-    <div className="relative isolate flex min-h-dvh flex-col">
-      {/* Moving mesh behind everything below; plain white without motion or WebGL2. */}
-      <CounterMeshBackdrop />
-
+    <div className="flex min-h-dvh flex-col">
       <header className={`${column} w-full`}>
         <div className="border-b border-lavender pt-[15px] pb-[13px] font-system text-[27px] leading-[1.2] font-bold tracking-[-0.035em]">
           Counter<span className="text-violet">.</span>
@@ -38,7 +34,7 @@ export default function Home() {
         {/* Full width: the hero's grid sets its own 1240px column. */}
         <LandingHero />
 
-        <section aria-label="How Counter works" className={`${column} mt-12 sm:mt-16`}>
+        <section id="how-it-works" aria-label="How Counter works" className={`${column} mt-12 scroll-mt-6 sm:mt-16`}>
           <div className="grid gap-8 border-t border-ink pt-8 sm:grid-cols-3 sm:gap-10">
             {POINTS.map((p, i) => (
               <div key={p.title}>

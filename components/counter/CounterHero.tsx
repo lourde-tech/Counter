@@ -19,26 +19,38 @@ export function CounterHero({ sampleHref }: CounterHeroProps) {
       <div className="counter-hero__layout">
         <div className="counter-hero__intro">
           <p className="counter-hero__eyebrow">For renters with a rent increase</p>
-          <h1 id="counter-hero-title">Your rent went up.<br />Push back with real listings.</h1>
+          {/* One sentence pair, one style; lines wrap naturally. */}
+          <h1 id="counter-hero-title">Your rent went up. Push back with real listings.</h1>
           <p className="counter-hero__lede">Our team checks nearby listings by hand. You choose what to ask for and get a message you can edit and send.</p>
+          {/*
+            Primary first in the DOM (and in tab order). On desktop the row is reversed so the quiet
+            button sits on the left and the violet one on the right; when stacked, primary comes first.
+          */}
           <div className="counter-hero__actions">
             <a className="counter-hero__cta" href={sampleHref ?? "#counter-renewal-example"} data-counter-cta={sampleHref ? undefined : ""}>Try a sample case</a>
-            <p className="counter-hero__invite">Got a link from our team? Open it to start.</p>
+            <a className="counter-hero__secondary" href="#how-it-works">See how it works</a>
           </div>
+          <p className="counter-hero__invite">Got a link from our team? Open it to start.</p>
         </div>
 
         <figure id="counter-renewal-example" className="counter-hero__scene" data-counter-scene tabIndex={-1} aria-labelledby="counter-example-title">
+          {/*
+            Photo frame, back to front: 1 photo, 2 aurora ribbons, 3 connector and endpoint.
+            The frame clips all three (including the endpoint's glow) to its rounded rectangle.
+            The phone below is a sibling stacked above the frame, free to overlap its edge.
+          */}
           <div className="counter-hero__photo">
             {/* eslint-disable-next-line @next/next/no-img-element -- static export: no image optimizer, and the WebP is already sized */}
             <img src="/images/counter-rowhouses.webp" width={1040} height={1300} alt="" decoding="async" />
-            {/* Violet ribbons: above the photo, clipped to its rounded corners, below the connector and phone. */}
             <HeroAurora />
+            <div className="counter-hero__connector" aria-hidden="true">
+              <svg className="counter-hero__path" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                <path className="counter-hero__path-track" d="M 89 27 V 39 Q 89 45 83 45 H 80 Q 76 45 76 51 V 57 H 48" vectorEffect="non-scaling-stroke"></path>
+                <path className="counter-hero__path-trace" data-counter-beam pathLength={1} d="M 89 27 V 39 Q 89 45 83 45 H 80 Q 76 45 76 51 V 57 H 48" vectorEffect="non-scaling-stroke"></path>
+              </svg>
+              <span className="counter-hero__marker"></span>
+            </div>
           </div>
-          <svg className="counter-hero__path" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-            <path className="counter-hero__path-track" d="M 89 27 V 39 Q 89 45 83 45 H 80 Q 76 45 76 51 V 57 H 48" vectorEffect="non-scaling-stroke"></path>
-            <path className="counter-hero__path-trace" data-counter-beam pathLength={1} d="M 89 27 V 39 Q 89 45 83 45 H 80 Q 76 45 76 51 V 57 H 48" vectorEffect="non-scaling-stroke"></path>
-          </svg>
-          <span className="counter-hero__marker" aria-hidden="true"></span>
 
           <figcaption className="counter-hero__phone">
             <div className="counter-hero__phone-screen">

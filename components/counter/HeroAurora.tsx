@@ -29,7 +29,7 @@ export default function HeroAurora() {
       aria-hidden="true"
       data-counter-aurora
       data-ribbons={small ? 2 : 3}
-      className="pointer-events-none absolute inset-0 overflow-hidden rounded-[inherit] opacity-25 [mask-image:linear-gradient(to_bottom,transparent_20%,black_75%)]"
+      className="pointer-events-none absolute inset-0 z-[1] overflow-hidden rounded-[inherit] opacity-45 [mask-image:linear-gradient(to_bottom,transparent_20%,black_75%)]"
     >
       {/*
         The ribbons render around the canvas's vertical middle. On desktop that is the middle of the
@@ -38,7 +38,7 @@ export default function HeroAurora() {
       */}
       <div className="absolute inset-x-0 top-0 h-full min-[761px]:top-[22%]">
         <DecorativeBoundary>
-          <AuroraRibbons className="h-full w-full" ribbons={small ? 2 : 3} speed={0.35} amplitude={0.45} theme="light" environment="none" />
+          <AuroraRibbons className="h-full w-full" ribbons={small ? 2 : 3} speed={0.35} amplitude={0.45} loopSeconds={12} theme="light" environment="none" />
         </DecorativeBoundary>
       </div>
     </div>

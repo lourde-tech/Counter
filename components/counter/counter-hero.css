@@ -9,8 +9,7 @@
   --counter-display: var(--counter-system);
   --counter-body: var(--counter-system);
   margin: 0;
-  /* Transparent so the page's moving mesh shows through; the body underneath is white. */
-  background: transparent;
+  background: var(--counter-paper);
   color: var(--counter-ink);
   color-scheme: only light;
   font: 400 16px/1.5 var(--counter-body);
@@ -42,47 +41,79 @@
 }
 
 .counter-hero .counter-hero__intro h1 {
-  margin-block: 19px 20px;
+  margin-block: 19px 24px;
   color: var(--counter-ink);
-  font: 700 clamp(41px, 5.45vw, 76px)/1.04 var(--counter-display);
-  letter-spacing: -.05em;
+  font: normal 700 clamp(2.5rem, 5.5vw, 6rem)/1.02 var(--counter-display);
+  letter-spacing: -.045em;
 }
 
 .counter-hero__intro .counter-hero__lede {
-  max-width: 43ch;
+  max-width: 36rem;
   color: var(--counter-ink);
-  font-size: clamp(16px, 1.7vw, 19px);
-  line-height: 1.55;
+  font-size: 18px;
+  line-height: 1.625;
   text-wrap: pretty;
 }
 
+/* The intro column is a size container so the buttons stack when they no longer fit side by side. */
+.counter-hero__intro { container-type: inline-size; }
+
+/* DOM order is primary first; reversed on wide rows so the quiet button sits on the left. */
 .counter-hero__actions {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
   align-items: center;
-  gap: 11px 15px;
-  margin-top: 23px;
+  gap: 16px;
+  margin-top: 32px;
 }
 
-.counter-hero .counter-hero__cta {
+.counter-hero .counter-hero__cta,
+.counter-hero .counter-hero__secondary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 50px;
-  padding: 11px 19px 11px 20px;
+  min-height: 52px;
+  padding: 15px 36px;
+  border: 1px solid transparent;
   border-radius: 999px;
-  background: var(--counter-violet);
-  color: var(--counter-paper);
   font: 650 15px/1.2 var(--counter-display);
   text-decoration: none;
-  transition: background-color 160ms ease;
+  white-space: nowrap;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+.counter-hero .counter-hero__cta {
+  background: var(--counter-violet);
+  color: var(--counter-paper);
 }
 
 .counter-hero .counter-hero__cta:hover {
   background: var(--counter-violet-deep);
 }
 
+/* Quiet outlined pill. */
+.counter-hero .counter-hero__secondary {
+  border-color: var(--counter-ink);
+  background: transparent;
+  color: var(--counter-ink);
+  font-weight: 550;
+}
+
+.counter-hero .counter-hero__secondary:hover {
+  background: var(--counter-lavender);
+}
+
+@container (max-width: 459px) {
+  .counter-hero__actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+}
+
 .counter-hero__intro .counter-hero__invite {
+  margin-top: 16px;
   color: var(--counter-ink);
   font: 500 13px/1.45 var(--counter-display);
 }
@@ -99,13 +130,27 @@
   scroll-margin-block-start: 20px;
 }
 
+/*
+ * Visual area, back to front: 1 photo, 2 aurora ribbons, 3 connector and endpoint
+ * (all inside this frame, which clips them and their glow to its rounded rectangle),
+ * 4 the phone (a sibling, free to overlap the frame's edge).
+ */
 .counter-hero__photo {
   position: absolute;
   inset: 15px 0 15px 34%;
-  z-index: -3;
+  z-index: 0;
+  isolation: isolate;
   overflow: hidden;
   border-radius: 24px;
   background: var(--counter-lavender);
+}
+
+/* Spans the whole scene so the path keeps its scene coordinates; the frame clips it. */
+.counter-hero__connector {
+  position: absolute;
+  z-index: 2;
+  inset: -15px 0 -15px -51.5152%; /* undoes the frame's inset: 34% of the scene = 34/66 of the frame */
+  pointer-events: none;
 }
 
 .counter-hero__photo img {
@@ -120,7 +165,6 @@
 
 .counter-hero__path {
   position: absolute;
-  z-index: -1;
   inset: 0;
   width: 100%;
   height: 100%;
@@ -139,7 +183,6 @@
 
 .counter-hero__marker {
   position: absolute;
-  z-index: -1;
   top: 27%;
   left: 89%;
   width: 15px;
@@ -152,6 +195,8 @@
 }
 
 .counter-hero__phone {
+  position: relative;
+  z-index: 3;
   width: min(calc(100% - 47px), 332px);
   padding: 6px;
   border: 1px solid #646469;
@@ -476,6 +521,8 @@
     padding: 38px 0 10px;
   }
   .counter-hero__photo { inset: 0; }
+  .counter-hero__connector { inset: 0; }
+  .counter-hero__intro .counter-hero__lede { font-size: 17px; }
   .counter-hero__phone { width: 50%; margin-inline-start: 10px; }
   .counter-hero__phone-screen { padding: 6px 7px 6px; }
   .counter-hero__island { width: 48px; height: 14px; margin-bottom: 5px; }
