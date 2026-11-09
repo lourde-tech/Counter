@@ -11,12 +11,14 @@ import { z } from "zod";
 const requiredText = (max: number) =>
   z.string().trim().min(1, "Required").max(max, `Keep it under ${max} characters`);
 
+const number = { error: "Enter a number" };
+
 /** Bedrooms. 0 means a studio. */
-const beds = z.number().int().min(0).max(8);
+const beds = z.number(number).int("Whole number, 0 for a studio").min(0, "0 to 8").max(8, "0 to 8");
 /** Bathrooms in half steps (1, 1.5, 2 ...). */
-const baths = z.number().min(0.5).max(6).multipleOf(0.5);
+const baths = z.number(number).min(0.5, "At least 0.5").max(6, "6 or fewer").multipleOf(0.5, "Use half steps, like 1 or 1.5");
 /** Monthly rent in US dollars. The upper bound is only a typo guard. */
-const rent = z.number().positive().max(20_000);
+const rent = z.number(number).positive("Must be more than $0").max(20_000, "That looks too high. Check for a typo.");
 
 export const UnitSchema = z.object({
   /** Street area plus unit type, never an exact address. e.g. "Spruce St area, 1BR" */
@@ -26,8 +28,11 @@ export const UnitSchema = z.object({
 });
 
 export const ListingSchema = z.object({
-  /** e.g. "2BR/1BA on Spruce St" */
-  label: requiredText(80),
+  /**
+   * Street or block only, e.g. "Spruce St". Beds and baths come from the
+   * fields below, so the listing reads "a 2BR/1BA on Spruce St".
+   */
+  label: requiredText(40),
   beds,
   baths,
   /** The exact advertised rent, as listed. */
@@ -101,6 +106,14 @@ export const PERK_LABELS: Record<Perk, string> = {
   longer_lease: "A longer lease at this rate",
   repair_upgrade: "A repair or upgrade",
   move_out_flexibility: "Move-out flexibility",
+};
+
+export const ASK_LABELS: Record<AskType, string> = {
+  keep_current: "Keep my current rent",
+  meet_middle: "Meet in the middle",
+  match_listings: "Match the listings",
+  perk_instead: "Ask for a perk instead",
+  general_inquiry: "Ask about the renewal, no number",
 };
 
 export interface ChosenAsk {

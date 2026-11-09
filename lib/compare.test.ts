@@ -19,7 +19,7 @@ const TODAY = new Date(2026, 10, 9); // Nov 9, 2026
 
 function listing(advertisedRent: number, overrides: Partial<Listing> = {}): Listing {
   return {
-    label: `1BR/1BA at $${advertisedRent}`,
+    label: "Spruce St",
     beds: 1,
     baths: 1,
     advertisedRent,
@@ -239,7 +239,7 @@ describe("one listing", () => {
 });
 
 describe("mismatched beds", () => {
-  const ls = [listing(1500), listing(1550), listing(1650, { label: "2BR/1BA on Pine St", beds: 2 })];
+  const ls = [listing(1500), listing(1550), listing(1650, { label: "Pine St", beds: 2 })];
   const a = analyze(prep(ls), renter(1500, 1700), TODAY);
 
   it("names the listing with a different bedroom count", () => {
@@ -260,11 +260,11 @@ describe("mismatched beds", () => {
   it("names several listings in one sentence", () => {
     const flags = thinEvidence(
       prep([]).unit,
-      [listing(1500, { label: "Studio on Pine St", beds: 0 }), listing(1600, { label: "2BR on Locust St", beds: 2 }), listing(1550)],
+      [listing(1500, { label: "Pine St", beds: 0 }), listing(1600, { label: "Locust St", beds: 2 }), listing(1550)],
       TODAY,
     );
     expect(flags.map((f) => f.message)).toEqual([
-      "2 listings have a different number of bedrooms than your unit: Studio on Pine St and 2BR on Locust St.",
+      "2 listings have a different number of bedrooms than your unit: Studio/1BA on Pine St and 2BR/1BA on Locust St.",
     ]);
   });
 });
@@ -276,12 +276,12 @@ describe("stale listing", () => {
   });
 
   it("flags a listing checked more than 21 days ago", () => {
-    const ls = [listing(1500), listing(1550), listing(1600, { label: "1BR on Walnut St", checkedDate: "2026-10-18" })];
+    const ls = [listing(1500), listing(1550), listing(1600, { label: "Walnut St", checkedDate: "2026-10-18" })];
     const a = analyze(prep(ls), renter(1500, 1700), TODAY);
     expect(a.thinFlags).toEqual([
       {
         code: "stale_listing",
-        message: "One listing was checked more than 21 days ago and may have changed: 1BR on Walnut St.",
+        message: "One listing was checked more than 21 days ago and may have changed: 1BR/1BA on Walnut St.",
       },
     ]);
     expect(a.defaultAsk).toBe("general_inquiry");
@@ -359,12 +359,78 @@ describe("askOptions", () => {
 
   it("never uses promise or odds language", () => {
     const a = analyze(prep([listing(1500), listing(1550), listing(1600)]), renter(1500, 1700), TODAY);
-    const copy = [a.positionSentence, ...a.thinFlags.map((f) => f.message), ...a.options.map((o) => o.savingsLine ?? "")]
+    const b = analyze(prep([listing(1450), listing(1500), listing(1550)]), renter(1600, 1700), TODAY);
+    const copy = [
+      a.positionSentence,
+      ...a.thinFlags.map((f) => f.message),
+      ...a.options.map((o) => o.savingsLine ?? ""),
+      b.suggestionReason ?? "",
+    ]
       .join(" ")
       .toLowerCase();
     for (const word of ["guarantee", "chance", "likely", "odds", "score", "recommend"]) {
       expect(copy).not.toContain(word);
     }
+  });
+});
+
+/* Median at or below the current rent ------------------------------ */
+
+describe("median at or below the current rent", () => {
+  it("below: suggests and pre-selects keep_current, hides match_listings, keeps the median", () => {
+    // median 1500 < current 1600 < proposed 1700
+    const a = analyze(prep([listing(1450), listing(1500), listing(1550)]), renter(1600, 1700), TODAY);
+    expect(a.isThin).toBe(false);
+    expect(a.range?.median).toBe(1500);
+    expect(types(a)).toEqual(["keep_current", "meet_middle", "perk_instead", "general_inquiry"]);
+    expect(a.suggestedAsk).toBe("keep_current");
+    expect(a.defaultAsk).toBe("keep_current");
+    expect(a.suggestionReason).toBe(
+      "The middle rent among the listings we found, $1,500, is below the $1,600 you pay now.",
+    );
+    expect(option(a, "keep_current")).toMatchObject({ rent: 1600, totalSavings: 1200 });
+  });
+
+  it("equal: suggests and pre-selects keep_current, hides match_listings, keeps the median", () => {
+    // median 1600 = current 1600 < proposed 1700
+    const a = analyze(prep([listing(1550), listing(1600), listing(1650)]), renter(1600, 1700), TODAY);
+    expect(a.isThin).toBe(false);
+    expect(a.range?.median).toBe(1600);
+    expect(types(a)).not.toContain("match_listings");
+    expect(a.suggestedAsk).toBe("keep_current");
+    expect(a.defaultAsk).toBe("keep_current");
+    expect(a.suggestionReason).toBe(
+      "The middle rent among the listings we found, $1,600, is the same as what you pay now.",
+    );
+  });
+
+  it("just above: offers match_listings and suggests nothing", () => {
+    const a = analyze(prep([listing(1580), listing(1605), listing(1650)]), renter(1600, 1700), TODAY);
+    expect(option(a, "match_listings")).toMatchObject({ rent: 1605 });
+    expect(a.suggestedAsk).toBeNull();
+    expect(a.defaultAsk).toBeNull();
+  });
+
+  it("drops match_listings when rounding would land on the current rent", () => {
+    // median 1602 rounds to 1600, the same as keep_current
+    const a = analyze(prep([listing(1580), listing(1602), listing(1650)]), renter(1600, 1700), TODAY);
+    expect(types(a)).not.toContain("match_listings");
+    expect(a.suggestedAsk).toBeNull();
+  });
+
+  it("thin evidence wins: general_inquiry stays the default and nothing is suggested", () => {
+    const a = analyze(prep([listing(1450), listing(1500)]), renter(1600, 1700), TODAY);
+    expect(a.isThin).toBe(true);
+    expect(a.defaultAsk).toBe("general_inquiry");
+    expect(a.suggestedAsk).toBeNull();
+    expect(a.suggestionReason).toBeNull();
+  });
+
+  it("does not apply when there is no increase", () => {
+    const a = analyze(prep([listing(1450), listing(1500), listing(1550)]), renter(1700, 1700), TODAY);
+    expect(a.defaultAsk).toBe("general_inquiry");
+    expect(a.suggestedAsk).toBeNull();
+    expect(types(a)).not.toContain("match_listings");
   });
 });
 

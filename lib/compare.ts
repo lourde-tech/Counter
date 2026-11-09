@@ -1,10 +1,15 @@
 import type { AskType, CasePrep, Listing, RenterInput, Unit } from "./types";
-import { formatMoney, joinLabels, plural, roundCents } from "./format";
+import { formatMoney, joinLabels, listingName, plural, roundCents } from "./format";
 
 /*
- * Pure comparison logic. No I/O, no randomness, no scores, no recommendations.
+ * Pure comparison logic. No I/O, no randomness, no scores, no odds.
  * Every number shown to the renter comes either from the renter's own input
  * or from a listing our team verified by hand.
+ *
+ * The only suggestion we ever make: when the rent is going up, the evidence is
+ * solid, and the listings' median is at or below what the renter pays now, we
+ * suggest "Keep my current rent" (and hide "Match the listings", which would
+ * otherwise ask for less than the renter already pays).
  */
 
 export const MIN_LISTINGS = 3;
@@ -156,7 +161,7 @@ export function thinEvidence(unit: Unit, listings: Listing[], today: Date = new 
     const verb = mismatched.length === 1 ? "has" : "have";
     flags.push({
       code: "beds_mismatch",
-      message: `${someListings(mismatched.length)} ${verb} a different number of bedrooms than your unit: ${joinLabels(mismatched.map((l) => l.label))}.`,
+      message: `${someListings(mismatched.length)} ${verb} a different number of bedrooms than your unit: ${joinLabels(mismatched.map(listingName))}.`,
     });
   }
 
@@ -165,7 +170,7 @@ export function thinEvidence(unit: Unit, listings: Listing[], today: Date = new 
     const verb = stale.length === 1 ? "was" : "were";
     flags.push({
       code: "stale_listing",
-      message: `${someListings(stale.length)} ${verb} checked more than ${STALE_AFTER_DAYS} days ago and may have changed: ${joinLabels(stale.map((l) => l.label))}.`,
+      message: `${someListings(stale.length)} ${verb} checked more than ${STALE_AFTER_DAYS} days ago and may have changed: ${joinLabels(stale.map(listingName))}.`,
     });
   }
 
@@ -202,8 +207,15 @@ export interface AskOption {
 
 export interface AskOptions {
   options: AskOption[];
-  /** Pre-selected option. Only ever general_inquiry; otherwise the renter chooses with nothing selected. */
+  /**
+   * Pre-selected option: general_inquiry when the evidence is thin or there's no
+   * increase, keep_current when it is suggested, otherwise null (nothing selected).
+   */
   defaultAsk: AskType | null;
+  /** Only ever keep_current, and only when the listings' median is at or below the current rent. */
+  suggestedAsk: AskType | null;
+  /** Plain sentence explaining the suggestion, with the median in it. */
+  suggestionReason: string | null;
 }
 
 export function savingsLine(totalSavings: number, leaseMonths: number): string {
@@ -222,10 +234,17 @@ function rentOption(type: AskType, rent: number, renter: RenterInput): AskOption
   };
 }
 
+/** Why keep_current is suggested. Names the median so it stays visible. */
+export function suggestionSentence(median: number, current: number): string {
+  return median < current
+    ? `The middle rent among the listings we found, ${formatMoney(median)}, is below the ${formatMoney(current)} you pay now.`
+    : `The middle rent among the listings we found, ${formatMoney(median)}, is the same as what you pay now.`;
+}
+
 /**
- * The asks the renter can choose from. We make no recommendation and give no score.
- * Options whose number would equal the offer (or duplicate keeping the current rent)
- * are left out, because they wouldn't be asking for anything.
+ * The asks the renter can choose from. No scores. Options whose number would equal
+ * the offer, or would not be above the current rent, are left out: they would either
+ * ask for nothing or ask for less than the renter already pays.
  */
 export function askOptions(
   renter: RenterInput,
@@ -233,6 +252,8 @@ export function askOptions(
 ): AskOptions {
   const inc = getIncrease(renter);
   const options: AskOption[] = [];
+  const solidMedian = !evidence.isThin && evidence.median !== null ? evidence.median : null;
+  const suggestKeep = inc.hasIncrease && solidMedian !== null && solidMedian <= inc.current;
 
   if (inc.hasIncrease) {
     options.push(rentOption("keep_current", inc.current, renter));
@@ -243,9 +264,9 @@ export function askOptions(
     }
   }
 
-  if (!evidence.isThin && evidence.median !== null) {
-    const match = roundTo5(evidence.median);
-    if (match < inc.proposed) {
+  if (solidMedian !== null && !suggestKeep) {
+    const match = roundTo5(solidMedian);
+    if (match > inc.current && match < inc.proposed) {
       options.push(rentOption("match_listings", match, renter));
     }
   }
@@ -266,8 +287,17 @@ export function askOptions(
     savingsLine: null,
   });
 
+  if (suggestKeep) {
+    return {
+      options,
+      defaultAsk: "keep_current",
+      suggestedAsk: "keep_current",
+      suggestionReason: suggestionSentence(solidMedian, inc.current),
+    };
+  }
+
   const defaultAsk: AskType | null = evidence.isThin || !inc.hasIncrease ? "general_inquiry" : null;
-  return { options, defaultAsk };
+  return { options, defaultAsk, suggestedAsk: null, suggestionReason: null };
 }
 
 /* ------------------------------------------------------------------ */
@@ -284,6 +314,8 @@ export interface Analysis {
   isThin: boolean;
   options: AskOption[];
   defaultAsk: AskType | null;
+  suggestedAsk: AskType | null;
+  suggestionReason: string | null;
 }
 
 export function analyze(prep: CasePrep, renter: RenterInput, today: Date = new Date()): Analysis {
@@ -291,7 +323,7 @@ export function analyze(prep: CasePrep, renter: RenterInput, today: Date = new D
   const position = getPosition(renter.proposedRent, prep.listings);
   const thinFlags = thinEvidence(prep.unit, prep.listings, today);
   const isThin = thinFlags.length > 0;
-  const { options, defaultAsk } = askOptions(renter, { median: range?.median ?? null, isThin });
+  const asks = askOptions(renter, { median: range?.median ?? null, isThin });
 
   return {
     increase: getIncrease(renter),
@@ -301,7 +333,6 @@ export function analyze(prep: CasePrep, renter: RenterInput, today: Date = new D
     positionSentence: positionSentence(position, range),
     thinFlags,
     isThin,
-    options,
-    defaultAsk,
+    ...asks,
   };
 }

@@ -50,6 +50,11 @@ export function bedBathShort(beds: number, baths: number): string {
   return `${beds === 0 ? "Studio" : `${beds}BR`}/${baths}BA`;
 }
 
+/** "2BR/1BA on Spruce St". Built from the listing's own fields. */
+export function listingName(l: { beds: number; baths: number; label: string }): string {
+  return `${bedBathShort(l.beds, l.baths)} on ${l.label}`;
+}
+
 /** "2026-11-02" -> "Nov 2, 2026". Parsed as a calendar date so time zones can't shift it. */
 export function formatDate(isoDate: string): string {
   const [y, m, d] = isoDate.split("-").map(Number);

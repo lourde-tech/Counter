@@ -1,9 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+  // Fully static: no server routes, no server rendering at request time.
+  // Case data lives in the URL hash and renter input stays in React state.
+  output: "export",
   turbopack: {
     rules: {
       "*.css": {
