@@ -1,6 +1,5 @@
-import { CounterHero } from "@/components/counter/CounterHero";
 import Footer from "@/components/counter/Footer";
-import SampleCaseLink from "@/components/counter/SampleCaseLink";
+import LandingHero from "@/components/counter/LandingHero";
 import TeamContact from "@/components/counter/TeamContact";
 import { TEAM_CONTACT } from "@/lib/env";
 
@@ -33,7 +32,7 @@ export default function Home() {
 
       <main className="flex-1">
         {/* Full width: the hero's grid sets its own 1240px column. */}
-        <CounterHero />
+        <LandingHero />
 
         <section aria-label="How Counter works" className={`${column} mt-12 sm:mt-16`}>
           <div className="grid gap-8 border-t border-ink pt-8 sm:grid-cols-3 sm:gap-10">
@@ -47,11 +46,7 @@ export default function Home() {
           </div>
 
           <p className="mt-10 leading-relaxed">
-            Want to click through the whole flow?{" "}
-            <SampleCaseLink className="font-display font-medium underline underline-offset-4 hover:text-violet-deep">
-              Open a sample case
-            </SampleCaseLink>
-            . The listings are made up; enter $1,950 now and $2,100 new.
+            The sample case uses made-up listings. To walk through it, enter $1,950 now and $2,100 new.
           </p>
           {TEAM_CONTACT && (
             <p className="mt-3 leading-relaxed">
